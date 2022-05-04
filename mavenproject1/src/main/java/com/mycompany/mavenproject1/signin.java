@@ -87,6 +87,15 @@ public class signin extends javax.swing.JPanel {
         jLabel9.setFont(new java.awt.Font("Sitka Small", 0, 18)); // NOI18N
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel9.setText("SIGN UP");
+        jLabel9.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
+                signup(evt);
+            }
+            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
+            }
+            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -318,6 +327,11 @@ public class signin extends javax.swing.JPanel {
     private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField2ActionPerformed
+
+    private void signup(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_signup
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_signup
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
