@@ -463,7 +463,7 @@ public class signin_login extends javax.swing.JPanel {
                 }
                 else {
                     if(jPasswordField1.getText().equals(jPasswordField3.getText())){
-                        String sql="insert into customer (USERNAME,PASSWORD,OLD,JOP,EMAIL,PHONENUMBER) "
+                        String sql="insert into USERP (USERNAME,PASSWORD,OLD,JOP,EMAIL,PHONENUMBER) "
                                 + "values('"+jTextField3.getText()+"','"+jPasswordField1.getText()+"','"+bd+"','"
                                 +jTextField4.getText()+"','"+jTextField1.getText()+"','"+jTextField5.getText()+")";
 
