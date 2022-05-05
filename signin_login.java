@@ -369,7 +369,8 @@ public class signin_login extends javax.swing.JPanel {
     private void jPasswordField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPasswordField3ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jPasswordField3ActionPerformed
-
+    static String name;
+    
     private void clik(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_clik
         // TODO add your handling code here:
         try {
@@ -384,7 +385,7 @@ public class signin_login extends javax.swing.JPanel {
             Connection con=DriverManager.getConnection(url,user,password);
             con.setAutoCommit(false);
             Statement stmt=con.createStatement();
-            String name=jTextField2.getText();
+            name=jTextField2.getText();
             String pass=jPasswordField2.getText();
             String sqlst="select USERNAME,PASSWORD from USERP ";
             ResultSet s=stmt.executeQuery(sqlst);
