@@ -4,6 +4,15 @@
  */
 package com.mycompany.mavenproject1;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author yazan
@@ -50,8 +59,8 @@ public class income extends javax.swing.JPanel {
         mount_txt = new javax.swing.JTextField();
         jPanel10 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
+        fixed = new javax.swing.JRadioButton();
+        notfixed = new javax.swing.JRadioButton();
         jComboBox1 = new javax.swing.JComboBox<>();
         jPanel8 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
@@ -205,12 +214,17 @@ public class income extends javax.swing.JPanel {
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel8.setText("income type");
 
+        buttonGroup1.add(type_daily);
+        type_daily.setSelected(true);
         type_daily.setText("daily");
 
+        buttonGroup1.add(type_monthly);
         type_monthly.setText("monthly");
 
+        buttonGroup1.add(type_yearly);
         type_yearly.setText("yearly");
 
+        buttonGroup1.add(type_weekly);
         type_weekly.setText("weekly");
 
         mount.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -225,31 +239,47 @@ public class income extends javax.swing.JPanel {
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel9.setText("Sources of income");
 
-        jList1.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Fixed", "Not Fixed" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
+        fixed.setSelected(true);
+        fixed.setText("Fixed");
+        fixed.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fixedActionPerformed(evt);
+            }
         });
-        jScrollPane1.setViewportView(jList1);
+
+        notfixed.setText("Not Fixed");
+        notfixed.setActionCommand("Not Fixed");
+        notfixed.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                notfixedActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
         jPanel10.setLayout(jPanel10Layout);
         jPanel10Layout.setHorizontalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE)
             .addGroup(jPanel10Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1)
-                .addContainerGap())
+                .addGap(67, 67, 67)
+                .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE)
+                .addGap(57, 57, 57))
+            .addGroup(jPanel10Layout.createSequentialGroup()
+                .addGap(77, 77, 77)
+                .addComponent(fixed)
+                .addGap(30, 30, 30)
+                .addComponent(notfixed)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel10Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(49, 49, 49)
                 .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(fixed)
+                    .addComponent(notfixed))
+                .addContainerGap(231, Short.MAX_VALUE))
         );
 
         jComboBox1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -265,6 +295,15 @@ public class income extends javax.swing.JPanel {
         jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel6.setText("Add Income");
+        jLabel6.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
+                addincome(evt);
+            }
+            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
+            }
+            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+            }
+        });
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
@@ -344,7 +383,7 @@ public class income extends javax.swing.JPanel {
                                         .addGap(18, 18, 18)
                                         .addComponent(type_weekly))
                                     .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 148, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
                         .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
@@ -433,9 +472,98 @@ public class income extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
+    private void addincome(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_addincome
+        // TODO add your handling code here:
+        try {
+            // TODO add your handling code here:
+           
+           
+            
+            /*bd.setDate(Integer.parseInt(jcomDay.getSelectedItem().toString()));
+            bd.setMonth(jcomMonth.getSelectedIndex()+1);
+            bd.setYear(Integer.parseInt(jcomYear.getSelectedItem().toString()));*/
+            
+            String cur = this.jComboBox1.getSelectedItem().toString();
+            String type = null;
+            String typef = null;
+            if(type_daily.isSelected()){
+                type="daily";
+            }
+            else if(type_monthly.isSelected()){
+                type="monthly";
+            }
+            else if(type_weekly.isSelected()){
+                type="weekly";
+            }
+            else if(type_yearly.isSelected()){
+                type="yearly";
+            }
+            if(fixed.isSelected()){
+                typef="fixed";
+            }
+            else if(notfixed.isSelected()){
+                typef="notfixed";
+            }
+            String iduser = null ;
+           
+            Class.forName("oracle.jdbc.OracleDriver");
+            String url,user,password;
+            url="jdbc:oracle:thin:@localhost:1521/xe";
+            user="c##amrsalman";
+            password="123";
+            Connection con=DriverManager.getConnection(url,user,password);
+            con.setAutoCommit(false);
+            Statement stmt=con.createStatement();
+            
+            String sqlst="select * from USERP where USERNAME='"+name+"'";
+            ResultSet s=stmt.executeQuery(sqlst);
+            boolean z;
+            while(s.next()){
+                    if(s.getString("USERNAME").equals(name)){
+                       iduser=s.getString("USERID");
+                    }
+                }
+            if(mount_txt.getText().equals("")){
+                z=false;
+                 JOptionPane.showMessageDialog(null, "You must fill all the blanks");
+                
+            }
+                       
+            else{
+               String sql="insert into INCOME (TYPE_TIME,INCOME_AMOUNT,CURRENCY,USERID) "
+                                + "values('"+type+"','"+mount_txt.getText()+"','"+cur+"','"
+                                +"','"+iduser+")";
+
+                       
+                        System.out.println(sql);
+                        stmt.executeUpdate(sql);
+                        con.commit();
+                        //con.close();
+                        
+            }
+            
+            
+            
+            
+        } catch (SQLException ex) {
+            
+        } catch (ClassNotFoundException ex) {
+            
+        }
+    }//GEN-LAST:event_addincome
+
+    private void fixedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fixedActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_fixedActionPerformed
+
+    private void notfixedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_notfixedActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_notfixedActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JRadioButton fixed;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -451,7 +579,6 @@ public class income extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JList<String> jList1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
@@ -463,10 +590,10 @@ public class income extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel mount;
     private javax.swing.JTextField mount_txt;
+    private javax.swing.JRadioButton notfixed;
     private javax.swing.JRadioButton type_daily;
     private javax.swing.JRadioButton type_monthly;
     private javax.swing.JRadioButton type_weekly;
