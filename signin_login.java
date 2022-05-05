@@ -404,7 +404,7 @@ public class signin_login extends javax.swing.JPanel {
         } catch (SQLException ex) {
             
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(signin.class.getName()).log(Level.SEVERE, null, ex);
+            
         }
     }//GEN-LAST:event_clik
 
@@ -488,7 +488,7 @@ public class signin_login extends javax.swing.JPanel {
         } catch (SQLException ex) {
             
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(signin.class.getName()).log(Level.SEVERE, null, ex);
+            
         }
     }//GEN-LAST:event_singup
 
