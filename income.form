@@ -523,7 +523,6 @@
                 <Component class="javax.swing.JRadioButton" name="notfixed">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Not Fixed"/>
-                    <Property name="actionCommand" type="java.lang.String" value="Not Fixed"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="notfixedActionPerformed"/>

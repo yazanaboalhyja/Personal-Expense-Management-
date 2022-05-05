@@ -486,6 +486,7 @@ public class income extends javax.swing.JPanel {
             String cur = this.jComboBox1.getSelectedItem().toString();
             String type = null;
             String typef = null;
+            
             if(type_daily.isSelected()){
                 type="daily";
             }
@@ -505,7 +506,7 @@ public class income extends javax.swing.JPanel {
                 typef="notfixed";
             }
             String iduser = null ;
-           
+            String idn=null;
             Class.forName("oracle.jdbc.OracleDriver");
             String url,user,password;
             url="jdbc:oracle:thin:@localhost:1521/xe";
@@ -539,6 +540,8 @@ public class income extends javax.swing.JPanel {
                         stmt.executeUpdate(sql);
                         con.commit();
                         //con.close();
+                        
+                        JOptionPane.showMessageDialog(null, "Done");
                         
             }
             
