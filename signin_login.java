@@ -395,6 +395,7 @@ public class signin_login extends javax.swing.JPanel {
                      
                      
                      x=false;
+                     JOptionPane.showMessageDialog(null, "correct");
                      
                 }
                 
@@ -473,6 +474,8 @@ public class signin_login extends javax.swing.JPanel {
                         stmt.executeUpdate(sql);
                         con.commit();
                         //con.close();
+                        JOptionPane.showMessageDialog(null, "Done");
+                        
                     
                 }
                     else{
