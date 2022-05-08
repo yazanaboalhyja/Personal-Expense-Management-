@@ -5,20 +5,121 @@
 package com.mycompany.n;
 
 import java.awt.BorderLayout;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultListModel;
 
 /**
  *
  * @author yazan
  */
-public class mainpage extends javax.swing.JPanel {
-
+public class report extends javax.swing.JPanel {
+ DefaultListModel model = new DefaultListModel();
+ report r;
     /**
-     * Creates new form mainpage
+     * Creates new form report
      */
-    public mainpage() {
+    public report() throws ClassNotFoundException {
         initComponents();
+          try {
+            int i=0;
+            int j =0;
+             LocalDateTime now = LocalDateTime.now(); 
+            int day= now.getDayOfMonth();
+            int dayyear= now.getDayOfYear();
+            int weeksnum= day/7;
+            int weekyear=dayyear/7;
+            // TODO add your handling code here:
+            
+            Class.forName("oracle.jdbc.OracleDriver");
+            String url,user,password;
+            url="jdbc:oracle:thin:@localhost:1521/xe";
+            user="c##amrsalman";
+            password="123";
+            Connection con=DriverManager.getConnection(url,user,password);
+            con.setAutoCommit(false);
+            Statement stmt=con.createStatement();      
+            String sqlst="SELECT INCOME_AMOUNT,TYPE_TIME,USERID FROM income";
+            ResultSet s=stmt.executeQuery(sqlst);
+            
+            while(s.next()){
+                if(sy.userid==s.getInt("USERID")){
+                     if(s.getString("TYPE_TIME").equalsIgnoreCase("daily")){
+                         i = i+s.getInt("INCOME_AMOUNT")*day;
+                         j = j+s.getInt("INCOME_AMOUNT")*dayyear;
+                     }
+                    else if(s.getString("TYPE_TIME").equalsIgnoreCase("weekly")){
+                        i = i+s.getInt("INCOME_AMOUNT")*weeksnum;
+                        j = j+s.getInt("INCOME_AMOUNT")*weekyear;
+                        
+                     }
+                    else if(s.getString("TYPE_TIME").equalsIgnoreCase("monthly")){
+                        i = i+s.getInt("INCOME_AMOUNT");
+                        i = i+s.getInt("INCOME_AMOUNT")*now.getMonthValue();
+                    }
+                     else if(s.getString("TYPE_TIME").equalsIgnoreCase("yearly")){
+                       if(now.getMonthValue()==1){
+                            i = i+s.getInt("INCOME_AMOUNT");
+                       }
+                       j = j+s.getInt("INCOME_AMOUNT");
+                    }
+                     
+                
+                     
+                }
+                
+                
+            }
+            this.income.setText(Integer.toString(i));
+            int salary=i;
+            this.inatyear.setText(Integer.toString(j));
+             sqlst="SELECT * FROM expanse";
+             s=stmt.executeQuery(sqlst);
+            
+            while(s.next()){
+                if(sy.userid==s.getInt("USERID")){
+                    if(s.getString("TYPE").equals("Nonrenewable")){
+                    if(s.getDate("DATEEX").getMonth()==now.getMonthValue()){
+                        i=i-s.getInt("PRIC");
+                        model.addElement(s.getString("name")+" "+s.getString("TYPE")+" "+Integer.toString(s.getInt("PRICE")));
+                        
+                    }                  
+                
+                    }
+                    else if(s.getString("TYPE").equals("daily")){
+                        i=i-s.getInt("PRIC")*day;
+                         model.addElement(s.getString("name")+" "+s.getString("TYPE")+" "+Integer.toString(s.getInt("PRICE")));
+                    }
+                    else if(s.getString("TYPE").equals("monthly")){
+                        i=i-s.getInt("PRIC");
+                         model.addElement(s.getString("name")+" "+s.getString("TYPE")+" "+Integer.toString(s.getInt("PRICE")));
+                    }
+                    else if(s.getString("TYPE").equals("yearly")){
+                        if(now.getMonthValue()==1){
+                        i=i-s.getInt("PRIC");
+                         model.addElement(s.getString("name")+" "+s.getString("TYPE")+" "+Integer.toString(s.getInt("PRICE")));
+                        }
+                    }
+                }
+                
+                
+            }
+            this.exp_list.setModel(model);
+            this.remaining_salary.setText(Integer.toString(i));
+            this.epi.setText("you speand "+Integer.toString(i/salary*100)+"% from your income in this month");
+        
+        } catch (SQLException ex) {
+            
+        
+    }
+          
     }
 
     /**
@@ -44,8 +145,14 @@ public class mainpage extends javax.swing.JPanel {
         jPanel8 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-
-        setPreferredSize(new java.awt.Dimension(820, 550));
+        remaining_salary = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        exp_list = new javax.swing.JList<>();
+        jLabel8 = new javax.swing.JLabel();
+        income = new javax.swing.JLabel();
+        epi = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        inatyear = new javax.swing.JLabel();
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
         jPanel4.setAlignmentX(0.0F);
@@ -79,11 +186,6 @@ public class mainpage extends javax.swing.JPanel {
         );
 
         jPanel3.setBackground(new java.awt.Color(0, 153, 255));
-        jPanel3.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jPanel3MouseClicked(evt);
-            }
-        });
 
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText("expanse");
@@ -195,7 +297,22 @@ public class mainpage extends javax.swing.JPanel {
             .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
         );
 
-        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mycompany/n/a.jpg"))); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel6.setText("remaining salary");
+
+        remaining_salary.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+
+        jScrollPane1.setViewportView(exp_list);
+
+        jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel8.setText("income at this month");
+
+        income.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+
+        epi.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+
+        jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel9.setText("income at this year");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -208,16 +325,45 @@ public class mainpage extends javax.swing.JPanel {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(epi, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addComponent(income, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(inatyear, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel4Layout.createSequentialGroup()
+                                .addComponent(jLabel8)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(remaining_salary, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(jLabel8)
+                    .addComponent(jLabel9))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 470, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(remaining_salary, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(income, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(inatyear))
+                .addGap(58, 58, 58)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 301, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(epi, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -226,7 +372,7 @@ public class mainpage extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 842, Short.MAX_VALUE)
+            .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -235,23 +381,15 @@ public class mainpage extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 income i;
     private void jPanel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel2MouseClicked
-        this.removeAll();
+       this.removeAll();
       this.setLayout(new BorderLayout());
     
          i = new income();
          this.add(i, BorderLayout.CENTER);
     }//GEN-LAST:event_jPanel2MouseClicked
-expanse e;
-    private void jPanel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel3MouseClicked
-         this.removeAll();
-      this.setLayout(new BorderLayout());
-    
-         e = new expanse();
-         this.add(e, BorderLayout.CENTER);
-    }//GEN-LAST:event_jPanel3MouseClicked
-report r;
+
     private void jPanel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel5MouseClicked
-       this.removeAll();
+        this.removeAll();
       this.setLayout(new BorderLayout());
     
         try {
@@ -263,15 +401,19 @@ report r;
     }//GEN-LAST:event_jPanel5MouseClicked
 mainpage m;
     private void jPanel6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel6MouseClicked
-       this.removeAll();
+        this.removeAll();
       this.setLayout(new BorderLayout());
     
          m = new mainpage();
          this.add(m, BorderLayout.CENTER);
     }//GEN-LAST:event_jPanel6MouseClicked
-
+expanse e;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel epi;
+    private javax.swing.JList<String> exp_list;
+    private javax.swing.JLabel inatyear;
+    private javax.swing.JLabel income;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -279,6 +421,8 @@ mainpage m;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -286,5 +430,7 @@ mainpage m;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel8;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel remaining_salary;
     // End of variables declaration//GEN-END:variables
 }

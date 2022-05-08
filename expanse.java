@@ -2,7 +2,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package com.mycompany.mavenproject1;
+package com.mycompany.n;
+
+import java.awt.BorderLayout;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -84,6 +88,11 @@ public class expanse extends javax.swing.JPanel {
         jLabel1.setText("username");
 
         jPanel3.setBackground(new java.awt.Color(0, 153, 255));
+        jPanel3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jPanel3MouseClicked(evt);
+            }
+        });
 
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("income");
@@ -100,6 +109,11 @@ public class expanse extends javax.swing.JPanel {
         );
 
         jPanel5.setBackground(new java.awt.Color(0, 153, 255));
+        jPanel5.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jPanel5MouseClicked(evt);
+            }
+        });
 
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText("expanse");
@@ -118,6 +132,11 @@ public class expanse extends javax.swing.JPanel {
         );
 
         jPanel6.setBackground(new java.awt.Color(0, 153, 255));
+        jPanel6.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jPanel6MouseClicked(evt);
+            }
+        });
 
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel4.setText("report");
@@ -137,6 +156,11 @@ public class expanse extends javax.swing.JPanel {
         );
 
         jPanel7.setBackground(new java.awt.Color(0, 153, 255));
+        jPanel7.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jPanel7MouseClicked(evt);
+            }
+        });
 
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel5.setText("main");
@@ -477,6 +501,42 @@ public class expanse extends javax.swing.JPanel {
                     .addGap(0, 0, Short.MAX_VALUE)))
         );
     }// </editor-fold>//GEN-END:initComponents
+income i;
+    private void jPanel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel3MouseClicked
+         this.removeAll();
+      this.setLayout(new BorderLayout());
+    
+         i = new income();
+         this.add(i, BorderLayout.CENTER);
+    }//GEN-LAST:event_jPanel3MouseClicked
+expanse e;
+    private void jPanel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel5MouseClicked
+         this.removeAll();
+      this.setLayout(new BorderLayout());
+    
+         e = new expanse();
+         this.add(e, BorderLayout.CENTER);
+    }//GEN-LAST:event_jPanel5MouseClicked
+report r;
+    private void jPanel6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel6MouseClicked
+      this.removeAll();
+      this.setLayout(new BorderLayout());
+    
+        try {
+            r = new report();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(mainpage.class.getName()).log(Level.SEVERE, null, ex);
+        }
+         this.add(r, BorderLayout.CENTER);
+    }//GEN-LAST:event_jPanel6MouseClicked
+mainpage m;
+    private void jPanel7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel7MouseClicked
+       this.removeAll();
+      this.setLayout(new BorderLayout());
+    
+         m = new mainpage();
+         this.add(m, BorderLayout.CENTER);
+    }//GEN-LAST:event_jPanel7MouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
